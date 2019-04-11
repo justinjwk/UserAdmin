@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="UserAdmin">
+    <output-path>$PROJECT_DIR$/out/artifacts/UserAdmin</output-path>
+    <root id="archive" name="UserAdmin.jar">
+      <element id="library" level="application" name="HBase" />
+      <element id="library" level="application" name="HBase-Config" />
+      <element id="library" level="application" name="Hadoop" />
+      <element id="library" level="application" name="Hadoop-Config" />
+    </root>
+  </artifact>
+</component>
