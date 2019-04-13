@@ -33,8 +33,8 @@ public class UserAdmin {
                 String securityAnswer = args[7];
 
                 Put put1 = new Put(toBytes(rowId));
-                put1.add(toBytes("cred"), toBytes("email"), toBytes(email));
-                put1.add(toBytes("cred"), toBytes("password"), toBytes(password));
+                put1.add(toBytes("creds"), toBytes("email"), toBytes(email));
+                put1.add(toBytes("creds"), toBytes("password"), toBytes(password));
 
                 put1.add(toBytes("prefs"), toBytes("status"), toBytes(status));
                 put1.add(toBytes("prefs"), toBytes("date_of_birth"), toBytes(dob));
@@ -81,12 +81,13 @@ public class UserAdmin {
                 Get get = new Get(toBytes(rowId));
                 Result result = hTable.get(get);
                 byte[] passwd = result.getValue(toBytes("creds"), toBytes("password"));
+                System.out.println("password from HBase = " + Bytes.toString(passwd));
 
                 if (password.equals(Bytes.toString(passwd))) {
                     put1.add(toBytes("lastlogin"), toBytes("success"), toBytes("yes"));
                 }
                 else {
-                    put1.add(toBytes("lastlogin"), toBytes("success"), toBytes("yes"));
+                    put1.add(toBytes("lastlogin"), toBytes("success"), toBytes("no"));
                 }
 
                 put1.add(toBytes("lastlogin"), toBytes("ip"), toBytes(ip));
@@ -95,6 +96,8 @@ public class UserAdmin {
                 put1.add(toBytes("lastlogin"), toBytes("date"), toBytes(dateFormat.format(date)));
                 dateFormat = new SimpleDateFormat("HH:mm:ss");
                 put1.add(toBytes("lastlogin"), toBytes("time"), toBytes(dateFormat.format(date)));
+
+                hTable.put(put1);
 
             }
         }
@@ -116,13 +119,13 @@ public class UserAdmin {
         System.out.println("prefs:security_question=" + Bytes.toString(val5));
         byte[] val6 = result.getValue(toBytes("prefs"), toBytes("security_answer"));
         System.out.println("prefs:security_answer=" + Bytes.toString(val6));
-        byte[] val7 = result.getValue(toBytes("last_login"), toBytes("ip"));
+        byte[] val7 = result.getValue(toBytes("lastlogin"), toBytes("ip"));
         System.out.println("last_login:ip=" + Bytes.toString(val7));
-        byte[] val8 = result.getValue(toBytes("last_login"), toBytes("date"));
+        byte[] val8 = result.getValue(toBytes("lastlogin"), toBytes("date"));
         System.out.println("last_login:date=" + Bytes.toString(val8));
-        byte[] val9 = result.getValue(toBytes("last_login"), toBytes("time"));
+        byte[] val9 = result.getValue(toBytes("lastlogin"), toBytes("time"));
         System.out.println("last_login:time=" + Bytes.toString(val9));
-        byte[] val10 = result.getValue(toBytes("last_login"), toBytes("success"));
+        byte[] val10 = result.getValue(toBytes("lastlogin"), toBytes("success"));
         System.out.println("last_login:success=" + Bytes.toString(val10));
     }
 }
